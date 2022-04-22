@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Draw On Me</string>
+    <string name="bgimg">bgImg</string>
+    <string name="black_img">black_img</string>
+    <string name="yellow_img">yellow_img</string>
+    <string name="green_img">green_img</string>
+    <string name="red_img">red_img</string>
+    <string name="blue_img">blue_img</string>
+    <string name="eraser_img">eraser_img</string>
+    <string name="other_color">Other color</string>
+</resources>

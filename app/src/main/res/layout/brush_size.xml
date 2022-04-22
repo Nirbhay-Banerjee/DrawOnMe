@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageButton
+        android:id="@+id/ib_small"
+        android:tag="s1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="small_img"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ib_med"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src = "@drawable/small"
+        />
+
+    <ImageButton
+        android:id="@+id/ib_small_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="medium_img"
+
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ib_small"
+        app:layout_constraintBottom_toTopOf="@+id/ib_med"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src = "@drawable/small_two"
+        />
+
+    <ImageButton
+        android:id="@+id/ib_med"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="medium_img"
+        android:tag="s2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ib_small_two"
+        app:layout_constraintBottom_toTopOf="@+id/ib_med_two"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src = "@drawable/medium"
+        />
+
+    <ImageButton
+        android:id="@+id/ib_med_two"
+        android:tag="s3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="large_img"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ib_med"
+        app:layout_constraintBottom_toTopOf="@+id/ib_large"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src = "@drawable/medium_two"
+        />
+
+
+    <ImageButton
+        android:id="@+id/ib_large"
+        android:tag="s3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="large_img"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ib_med_two"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src = "@drawable/large"
+        />
+
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

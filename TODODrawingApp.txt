@@ -1,0 +1,440 @@
+
+sudo apt-get install ns2 
+also works 
+
+
+Kids drawing app
+
+BRIEF (To Be Mentioned In Resume)
+
+Draw on me is a canvas type application wherein the users can draw various figures on their Android device . 
+The application also contains the feature of selecting images from the gallery and enables the users to draw on the
+external image and save a copy. For a wide variety of selectable colors it uses the AmbilWarna Color Chooser library. 
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+Flow
+
+Will learn about customizing the view class and creating personally edited views on which we can draw.
+Will learn about importing images to and exporting/sharing images from the app
+Customized progress dialog
+Using snackbars and permissions
+Async tasks in the background
+In the app there will be a feature of selecting a background image and drawing on it and stuff
+
+
+First we need to create a DRawing View which extends from view class and now in this class we can create all the variables 
+that we will need for our app functionality like paint color,brush size,path etc.
+
+Paint is a higher level class and color extends from it..
+
+There is a path class in the android graphics which we need to import and extend our customPath from it
+
+//Can also check out for blur mode and etc on the internet..features that can be added to the app
+
+
+WE import from many classes here like
+Path-->The Path class encapsulates compound (multiple contour) geometric paths consisting of straight line segments, 
+quadratic curves, and cubic figures
+
+View-->To make a customized view
+
+Paint-->The Paint class holds the style and color information about how to draw geometries, text and bitmap
+
+Bitmap-->Bitmap, method by which a display space (such as a graphics image file) is defined, including the colour of each 
+of its pixels (or bits). 
+In effect, a bitmap is an array of binary data representing the values of pixels in an image or display
+Canvas-->White background which we have
+Colors-->Info about all colors in android
+
+
+//In brush size changing video
+
+Display metrics is basically what contains all info about current display like no. of pixels and etc.
+We need to make sure ki brush ka size changes independent of the screen size so we must use a convertor which uses floats as density independent pixels and takes care
+of this thing. This can be done using TypedValue class   
+
+The paint.style contains various tyles like stroke,fill etc
+
+There is a method of view class called on size changed which is called when the layout is inflated or created!!
+
+Creating a custom dialog and selecting  brush size from it
+
+Step 1 is to create another view which has the 3 image buttons.
+Each image button source can be made in the drawable 
+
+
+
+//IDEA FOR ERASER
+Just like color buttons eraser is a white color button....try to implement it that way
+
+
+Learning about layered listes in xml-->A list that can contain multiple items,especially shapes .
+
+Linear layout elements can be directly accessed using their positions,just like in arraylists
+
+
+
+We have added the colors functionality to the app but its pretty basic.In case advanced colors need to be added,third party libraries or kotlin 
+documentation can be read  Kotlin color picker tutorial from tutorial kart
+
+1 Bug is there still when we rub the image gets rubbed as well.Need to resolve that....an idea is to add a back type button...here i can
+just remove last element of paths array,just like in mi photo editor!!!
+Learnt about scales in the image adding stuff.Also learnt about tags and frame layouts etc.
+
+
+PERMISSIONS IN ANDROID
+
+We can make uses permissions in the android manifest file.There are a lot of other ways as well,but this is the default one.
+To access location we need the permissio access fine location (GPS)
+
+Companion object is basically a data class which contains constant objects
+
+
+The whole process is a bit long so it is written step by step down.
+
+1 Add the uses-permission line in the manifest file. Here we just are telling the android os that these are the permissions we
+are gonna need in our application,although we need to ask user again whether he grants or denies access to them!!
+Eg
+<uses-permission android:name=  "android.permission.CAMERA"/>
+
+2 We create a companion object in the activity where we need to ask permissions and in it we have a few constant variables which
+basically are our way to check if permission is here or not like
+private const val CAMERA_PERMISSION_CODE = 1
+This line basically means ki we have set the code for camera permission to 1
+
+3 Now we have to set a trigger,that is an event which will ask the user to grant the permissions which are there in the manifest
+file.Like we can use a button and set an onClick Listener to it  
+
+4 Then there is a certain structure of code or skeleton/syntax of code which needs to be followed in order to implement the permission
+access feature which is explained in 4 and 5.In 4 we are checking if we already have permission and if we dont then we are requesting it from
+user.We will get a result of our request that is either user agrees or denies,which we will handle in 5.Although,it is not necessary to handle
+but its a part of syntax.    
+
+trigger.setOnClickListener{
+//Basically our flow is to check if the permission is already granted to the application by the user,if it is then ok
+if not then we need to trigger or request the permission from the user.
+
+//The ContextCompat class can be used to check if a permission is granted to the app by the user .It needs argument
+context and the permission.
+//This if condition can also be used for checking multiple conditions by repeating the whole next line with
+//&& sign 
+if(ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED)
+{
+//THIS block of code is executed when the permission is already granted by the user...like here we can have a toast
+that says permission granted and stuff...
+//Basically whatever we need to do with that permission can only be done once we are granted access.This block is where
+we have access...so we can write everything we need to do with for eg the camera..maybe clicking a pic and stuff. 
+}
+
+else{
+//THIS is the block of code where we actually request some permission from our user 
+//For this purpose we need the ActivityCompat class,through whichwe can request permissions 
+//after overriding a method 
+
+//we can ask for multiple permissions also..because a parameter which is takes is arrayOf permissions along with
+//context  and activity specific permission request code(which we set in the companion object)..
+//must be>0 as it is written in the function definition
+
+ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.CAMERA)/*here in this array we can have 
+multiple permissions as well.*/
+,CAMERA_PERMISSION_CODE
+
+
+)
+
+
+
+}
+
+}
+
+5 Now after requesting we check how the user responds to our request.For implementing this we need to override
+a method..obviously outside the onCreate method..Although all this is not even needed..i mean if i have the permission
+then thats it..it is not necessary for me to show toast to user that he granted permission.If i dont have..just ask again like in the 4th pt.
+Once we call the requestPermissions  method in 4,automatically the onRequestPermissionResult is called,we dont need to explicitly call it.
+Basically we click on trigger..It asks for permission,if not altready granted through a dialog box.Now if we say Accept or Deny then these
+following lines of code will be called...for case accept and case deny.It will automatically after 2-3 denials give option of deny and dont ask
+again.
+
+
+@override onRequestPermissionResult(requestCode:Int,permissions:Array,grantResults:IntArray)
+{
+super.onRequestPermissionResult(requestCode,permissions,grantResults)
+
+if(requestCode==CAMERA_PERMISSION_CODE)
+{
+//now if the permission asked for was camera,then there are 2 possibilities..either it is granted or it is not
+//now we will be ahndling those possibilities
+
+  if(grantResults.isNotEmpty()&& grantResults[0]=PackageManager.PERMISSION_GRANTED)//checking if it is granted
+     {
+	//Maybe set a toast here that permission granted 
+	}
+
+else{
+//Maybe set a toast that permission denied,set it from settings..permission manager and stuff
+if u deny more than twice then it just makes it as deny and dont ask again}
+
+}
+
+}
+
+
+
+WE CAN ALSO USE 3RD PARTY LIBRARIES FOR PERMISSIONS BUT THIS IS THE DEFAULT PROCESS
+
+
+
+
+BASICS OF SNACKBAR VS TOAST
+
+Toast cant handle user inputs whereas snackbars can.Basically we can run some code or perform some actions using snackbars. {More on stackoverflow}
+
+There are a few more types of these like alert dialogs and custom progress bars...which perform different functions and acan be implemented using some syntax
+
+
+1 Snackbar--Very similar to toast
+
+2 Alert Dialog-- Basically gives 3 choice to user,yes no or cancel and based on selection it can run separate codes.
+      
+
+We need to use a trigger as in the previous case and we can set its on click listener
+Following is syntax for AlertDialog. We use the Builder class for conveniently constructing dialog
+
+
+val builder = AlertDialog.Builder(this)
+
+//Now there are certain properties which we need to set or create for the alert dialog builder
+
+builder.setTitle("Alert")   //setting title
+builder.setMessage("")	    //setting the text to be displayed on the alert dialog
+builder.setIcon(??root??)   //enter location of image as parameter
+
+//There are 3 cases...We can either perform positive action,negative or cancel
+//Positive action
+
+//Handling what happens if the user says yes to the alert
+builder.setPositiveButton("Yes")
+{
+dialogInterface,which->
+//Maybe show a toast or something
+}
+
+//negative action,similarily can be done as follows
+
+builder.setNegativeButton("No")
+{
+dialogInterface,which->
+//Maybe show a toast or something
+}
+//Now we have set all the required properties for the Builder object and thus now what is left is to only create the AlertDialog with the builder object
+
+val alert : AlertDialog = builder.create()
+
+//There are 2 basic properties which need to be set...one is show() and other is setCancelable(false)--->This prevents the alert dialog from vanishing if the user creates
+somewhere else on the screen.(like i do with myAirtel App)
+
+alert.setCancelable(false)
+alert.show() 
+
+
+
+
+
+3 Custom dialogs -->These are completely customisable...all of it is created by us only.We create the xml file and attach it to the Custom dialog using setContentView
+
+In textViews there is a property called foreground which kinda be used to give them selectable visibility...they look like they are selectables!!
+
+BASICALLY CREATING THIS IS VERY SIMPLE
+//just like the above ones,all this is done inside a method and that method is called from the trigger's onClickListener
+//using the dialog class
+
+val customDialog = Dialog(this)
+customDialog.setContentView(dialog_custom) //this line,just like in main activity is used to give or attach a xml file to the activity/in this case dialog 
+
+//dialog_custom is the xml file which we create on our own to show to the user
+//now suppose we have 2 selections for the user,so we can simply set onclickListeners to them
+
+customDialog.btn_submit.setOnClickListener(View.onClickListener{ //maybe give a toast that submit was clicked
+customDialog.dismiss() //important to dismiss the custom dialog after clicking on one of the selectables
+})
+
+customDialog.btn_cancel.setOnClickListener(View.onClickListener{ //maybe give a toast that submit was clicked
+customDialog.dismiss() //important to dismiss the custom dialog after clicking on one of the selectables
+})
+
+customDialog.show()
+//to finally show it to the ui
+**The context for the toast will be applicationContext because its safer to use..."this" also works though .Reason is because we are in a closure
+
+
+4 CustomProgressDialogs-->Basically these are used to indicate to the user when any background process/async task is running.Its just the loader..along with some text maybe
+
+
+val customProgressdialog = Dialog(this)
+customProgressDialog.setContentView(dialog_custom_progress)
+customProgressDialog.show()
+
+
+//In the layout file we can simply use a horizontal linear layout, with a progress bar and textView
+
+
+ALSO CHECKOUT DOCUMENTATION FOR PROGRESS BARS AND DIALOGS IN GENERAL..also the drag and drop concept..we can check
+
+
+//
+//
+For permissions
+In order to read from gallery we need permission read external storage and similarly write external storage to save it to device
+
+We need to follow the basic steps.Also we can use a cleaner approach for the purpose and add a helper method outside of the onCreate which just checks if we already have
+permission.This way we dont need to ask for permission everytime the trigger is clicked.The trigger in our case will be the gallery image button.
+
+
+
+SELECTING IMAGE FROM GALLERY
+
+for this purpose we will be using intents 
+and the simple on result method
+
+
+
+DONE IMPLEMENTING UNDO AND REDO FUNCTIONALITIES
+
+Logic was same just removing from the mPaths array
+
+
+
+ASYNC TASK
+
+This means doing something in the background.  
+
+For eg when we need to store something on device or loading a file from the internet.These processes result in the ui thread being blocked for a couple of milliseconds
+if done in the foreground.This we do not want.So we will try to do such tasks in the background.  
+  Theres this method called doInBackGround which can be used for this purpose 
+
+We can create a new class called executeAsyncTask
+3 Functions which are overriden and executed while using async tasks are
+
+onPreExecute
+
+doInBackGround
+
+onPostExecute
+
+Also we can use custom progress dialog to indicate the user that something is happening.
+
+Step 1 for async tasks is to start the async task,and then use the .execute() method
+Whatever class we create for async tasks,it must inherit from AsyncTask class.
+Then the 3 methods need to be overridden.
+
+
+
+
+//TO STORE DATA TO DEVICE
+
+For this purpose we need the permission write to external storage.
+Then we need to create a different path and have an xml file inside of that path,with root element as paths. In that xml file,we add an attribute called external path
+It requires a name and a path.Name can be anything...path is usually Android/data/::::pacakgeName:::::/files
+
+We will also require provider in the manifest file which will have its attributes and also contain some metadata,as to information about the path.
+metadata has a name,and a resource attribute...resource attribute is just the directory of the layout path we created.
+
+
+A content provider manages access to a central repository of data. 
+A provider is part of an Android application, which often provides its own UI for working with the data.
+Basically to store data on a device we need to have a provider.
+
+	    android:authorities="com.example.drawonme.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+
+This is an example of what a provider element may contain.There are other attributes as well.Exported property means that the data of this provider should not be 
+available to other applications.
+ android:grantUriPermissions="true" makes it able for the data to overcome restriction imposed by exported once.Or maybe provides a one time permission to do something.
+//Eg of email attachment opener in the documentation can be referred to.. 
+The rest 2 are necessary attributes. Authorities identify the data offered by the provider.
+
+
+
+NOW
+Here while exporting,our whole game is to convert the view,on which we have drawn stuff into a bitmap.Because bitmap/images can themselves be shared and stored but
+views cant be stored.So basically,what all we have done in the app was inside of the drawing view we created and now that drawing view is to be converted into a bitmap.  
+
+
+
+After this process has been done and implemented.What we need to do is save the image in the background without freezing our ui thread.
+For this purpose we will use the logic of async tasks,but the async task class has been depreciated,so we will use the concept of kotlin coroutines.
+
+To be able to use Kotlin coroutines we need to add lifecycle viewmodel implementations in the dependencies,along with a particular version.
+
+Then we need to create a private inner class of Bitmap Async Task which takes a bitmap as a parameter and instead of making it extend AsyncTask class,we need to make
+it extend the class ViewModel.Then we need to implement the three functions onPreExecute,doinBackGround and onPostExecute. 
+
+This is kind of the syntax to do this.We need to launch the 3 methods in scope of the viewmodel.
+Then these 3 functions can be declared further on,downwards.This can be understood as a simple namespace kind of thing,or abstract class kind of thing.It consists 
+declarations of all functions,but not implemntations.From outside,whenever the execute function is called,these 3 functions will be executed.
+ fun execute() = viewModelScope.launch {
+
+            onPreExecute()
+
+            val result = doInBackground()
+
+            onPostExecute(result)
+
+        }
+
+
+function insides is very similar to the traditional approach,using bytestream,fos and bitmap compress.
+
+All methods happen within scope of coroutines.In the do method,we are actually playing with the io streams so we need to use the Dispatchers.IO..like
+
+private suspend fun doInBackground(): String = withContext(Dispatchers.IO) {
+//whatever}
+
+Suspending functions are at the center of a coroutine and they can be paused and resumed at a later time.
+
+
+
+SHARING
+For sharing functionality to be added we can use the Media Scanner Class to scan the image and ultimately sharing is done through the intent only
+
+
+DONE WITH THE APP
+
+
+SOME FEATURES WHICH I PLAN
+1 Color chooser improved--->Tried and found that ambil warna shit is stupid.I think i need to look at a different library--DONE
+A bug is there ki once the color is selected from dialog and then we select the color again from the pallette then it causes some error...the previously selected color
+is not directly selected. Got an approach for that ki default selected color ko kuch aur bana du maybe...gotta think about this.
+I guess issue arises in the on click listener or in the mDrawPaint maybe.Gotta check.
+Completely implemented 
+
+2 Brush size selector improved
+3 Random color button--not required
+4 Making ui a bit more eye catching
+5 Using different images for the lower icons
+6 Maybe adding some text to the icons
+
+
+----------------------I HOPE TO DO THESE TODAY ONLY,OR MAYBE DO SOME DSA TODAY AND ALL THESE TOMORROW.FROM NEXT WEEK THE NEXT APP WILL BE STARTED AND DSA WILL BE PUT ON
+PRIOITY-----------------------------------------------
+  
+
+
+I have installed in on my device
+
+Some bugs still left are
+when  u click on the add image button,the canvas must be set to blank!!
+need a clear all button
+sharing is not working
+rest all is going smooth
+can see if adding filter to the images is a viable solution as of noww
+
+
